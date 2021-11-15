@@ -1,10 +1,9 @@
 {
   "compilerOptions": {
-    "rootDir": "./src",
-    "outDir": "./build",
+    "outDir": "dist",
     "target": "ES2018",
-    "module": "ESNext",
-    "moduleResolution": "Node",
+    "module": "commonjs",
+    "moduleResolution": "node",
     "lib": [
       "ESNext",
       "ESNext.AsyncIterable"
@@ -13,21 +12,14 @@
     "allowJs": true,
     "strict": true,
     "experimentalDecorators": true,
-    "baseUrl": ".",
-    "paths": {
-      "~/*": [
-        "./*"
-      ],
-      "@/*": [
-        "./*"
-      ]
-    },
+    "skipLibCheck": true,
+    "baseUrl": "./",
     "types": [
       "@types/node"
     ]
   },
   "exclude": [
     "node_modules",
-    "build"
+    "dist"
   ],
 }

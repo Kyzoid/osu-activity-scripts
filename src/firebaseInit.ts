@@ -1,5 +1,5 @@
-const { initializeApp } = require('firebase/app');
-const { getFirestore } = require('firebase/firestore');
+import { initializeApp }from 'firebase/app';
+import { getFirestore } from 'firebase/firestore';
 
 const config = {
   apiKey: process.env.API_KEY,
@@ -14,4 +14,4 @@ const config = {
 const app = initializeApp(config);
 const db = getFirestore();
 
-module.exports = { app: app, db: db };
+export { app, db };
