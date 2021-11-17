@@ -2,8 +2,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import axios from 'axios';
-import { OsuGateway } from './domain/gateways';
-import { FirestoreGateway } from './domain/gateways';
+import { OsuGateway } from './infrastructure/gateways';
+import { FirestoreGateway } from './infrastructure/gateways';
 import { Score, User } from './core/models';
 
 const main = async () => {

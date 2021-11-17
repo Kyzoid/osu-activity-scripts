@@ -1,4 +1,4 @@
-import { FireUser } from "src/domain/types";
+import { FireUser } from '../../../infrastructure/types';
 import { UserInterface } from '..';
 
 export interface FirestoreGatewayInterface {

@@ -1,4 +1,4 @@
-import { OSU_GAME_MODE, OsuRankings, OsuUserScore, OSU_SCORE_TYPE } from '../../../domain/types';
+import { OSU_GAME_MODE, OsuRankings, OsuUserScore, OSU_SCORE_TYPE } from '../../../infrastructure/types';
 
 export interface OsuGatewayInterface {
   getRankings(mode: string, countryCode: string, page: number): Promise<OsuRankings>;
