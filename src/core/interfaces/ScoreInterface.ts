@@ -6,4 +6,5 @@ export interface ScoreInterface {
   rank: string;
   score: number;
   user: string;
+  mods: string[];
 }

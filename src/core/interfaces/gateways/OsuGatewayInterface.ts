@@ -1,6 +1,6 @@
-import { GAME_MODE, Rankings, UserScore, SCORE_TYPE } from '../../../domain/types';
+import { OSU_GAME_MODE, OsuRankings, OsuUserScore, OSU_SCORE_TYPE } from '../../../domain/types';
 
 export interface OsuGatewayInterface {
-  getRankings(mode: string, countryCode: string, page: number): Promise<Rankings>;
-  getUserScores(userId: number, type: SCORE_TYPE, mode: GAME_MODE, limit: number): Promise<UserScore[]>
+  getRankings(mode: string, countryCode: string, page: number): Promise<OsuRankings>;
+  getUserScores(userId: number, type: OSU_SCORE_TYPE, mode: OSU_GAME_MODE, limit: number): Promise<OsuUserScore[]>
 }

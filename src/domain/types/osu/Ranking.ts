@@ -1,4 +1,4 @@
-export type Ranking = {
+export default interface Ranking {
   grade_counts: {
     a: number;
     s: number;

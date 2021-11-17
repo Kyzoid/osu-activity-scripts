@@ -1,4 +1,4 @@
-export type UserScore = {
+export default interface UserScore {
   id: number;
   accuracy: number;
   mods: string[]

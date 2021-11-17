@@ -1,6 +1,6 @@
 import { ScoreInterface } from '../interfaces';
 
-export class Score implements ScoreInterface {
+export default class Score implements ScoreInterface {
   constructor(
     public id: number,
     public accuracy: number,
@@ -9,5 +9,6 @@ export class Score implements ScoreInterface {
     public rank: string,
     public score: number,
     public user: string,
+    public mods: string[]
   ) {}
 }

@@ -1,6 +1,6 @@
 import { UserInterface, ScoreInterface } from '../interfaces';
 
-export class User implements UserInterface {
+export default class User implements UserInterface {
   constructor(
     public id: number,
     public username: string,

@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { OsuGatewayInterface } from '../../core/interfaces';
-import { GAME_MODE, Rankings, SCORE_TYPE, UserScore } from '../types';
+import { OSU_GAME_MODE, OsuRankings, OSU_SCORE_TYPE, OsuUserScore } from '../types';
 
 export class OsuGateway implements OsuGatewayInterface {
   axiosInstance: AxiosInstance;
@@ -17,13 +17,13 @@ export class OsuGateway implements OsuGatewayInterface {
     });
   }
 
-  getUserScores(userId: number, type: SCORE_TYPE, mode: GAME_MODE, limit: number): Promise<UserScore[]> {
+  getUserScores(userId: number, type: OSU_SCORE_TYPE, mode: OSU_GAME_MODE, limit: number): Promise<OsuUserScore[]> {
     return this.axiosInstance.get(`/users/${userId}/scores/${type}?mode=${mode}&limit=${limit}`)
-      .then((res: AxiosResponse<UserScore[]>) => res.data);
+      .then((res: AxiosResponse<OsuUserScore[]>) => res.data);
   }
 
-  getRankings(mode: string, countryCode: string, page: number): Promise<Rankings> {
+  getRankings(mode: string, countryCode: string, page: number): Promise<OsuRankings> {
     return this.axiosInstance.get(`/rankings/${mode}/performance?country=${countryCode}&page=${page}`)
-      .then((res: AxiosResponse<Rankings>) => res.data);
+      .then((res: AxiosResponse<OsuRankings>) => res.data);
   }
 }

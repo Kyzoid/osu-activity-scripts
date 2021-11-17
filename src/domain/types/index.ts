@@ -1,19 +1,26 @@
-import { Ranking } from './Ranking';
-import { User } from './User';
-import { UserScore } from './UserScore';
-import { Rankings } from './Rankings';
+import FireUser from './firebase/User';
+import FireScore from './firebase/Score';
+import FireEventHistory from './firebase/EventHistory';
 
-enum SCORE_TYPE {
+import OsuRanking from './osu/Ranking';
+import OsuUser from './osu/User';
+import OsuUserScore from './osu/UserScore';
+import OsuRankings from './osu/Rankings';
+
+enum OSU_SCORE_TYPE {
   BEST = 'best',
   FIRSTS = 'firsts',
   RECENT = 'recent'
 }
 
-enum GAME_MODE {
+enum OSU_GAME_MODE {
   FRUITS = 'fruits',
   MANIA = 'mania',
   OSU = 'osu',
   TAIKO = 'taiko'
 }
 
-export { SCORE_TYPE, GAME_MODE, Ranking, User, UserScore, Rankings };
+export {
+  FireUser, FireScore, FireEventHistory,
+  OSU_SCORE_TYPE, OSU_GAME_MODE, OsuRanking, OsuUser, OsuUserScore, OsuRankings
+};

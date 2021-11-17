@@ -1,4 +1,3 @@
-import { GAME_MODE, SCORE_TYPE } from 'src/domain/types';
 import { OsuGatewayInterface } from '../interfaces';
 
 export class GetTopFifty {
