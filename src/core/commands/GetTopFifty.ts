@@ -1,12 +1,21 @@
-import { OsuGatewayInterface } from '../interfaces';
+import { FirestoreGatewayInterface, OsuGatewayInterface, } from '../interfaces';
 
 export class GetTopFifty {
   constructor(
-    private osuGateway: OsuGatewayInterface
+    private osuGateway: OsuGatewayInterface,
+    private firestoreGateway: FirestoreGatewayInterface
   ) { }
 
   async execute() {
-    // const franceRankings = await this.osuGateway.getRankings('mania', 'fr', 1);
-    // const scores = await this.osuGateway.getUserScores(franceRankings.ranking[0].user.id, SCORE_TYPE.BEST, GAME_MODE.MANIA, 100);
+    const users = await this.osuGateway.getRankings('mania', 'fr', 1);
+
+    const promises = [];
+    for (const user of users) {
+      promises.push(this.firestoreGateway.setUser(user.id.toString(), user));
+    }
+
+    await Promise.all(promises);
+    
+    return;
   }
 }

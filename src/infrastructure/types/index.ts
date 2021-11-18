@@ -2,7 +2,7 @@ import FireUser from './firebase/User';
 import FireScore from './firebase/Score';
 import FireEventHistory from './firebase/EventHistory';
 
-import OsuRanking from './osu/Ranking';
+import OsuUserStatistics from './osu/UserStatistics';
 import OsuUser from './osu/User';
 import OsuUserScore from './osu/UserScore';
 import OsuRankings from './osu/Rankings';
@@ -22,5 +22,5 @@ enum OSU_GAME_MODE {
 
 export {
   FireUser, FireScore, FireEventHistory,
-  OSU_SCORE_TYPE, OSU_GAME_MODE, OsuRanking, OsuUser, OsuUserScore, OsuRankings
+  OSU_SCORE_TYPE, OSU_GAME_MODE, OsuUserStatistics, OsuUser, OsuUserScore, OsuRankings
 };

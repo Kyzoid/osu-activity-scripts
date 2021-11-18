@@ -5,6 +5,9 @@ export default interface User {
   username: string;
   accuracy: number;
   globalRank: number;
+  playCount: number;
   pp: number;
   scores: DocumentReference[];
+  isRanked: boolean;
+  isActive: boolean;
 }

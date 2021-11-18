@@ -1,4 +1,4 @@
-export default interface Ranking {
+export default interface UserStatistics {
   grade_counts: {
     a: number;
     s: number;
@@ -13,5 +13,7 @@ export default interface Ranking {
   user: {
     id: number;
     username: string;
+    is_active: boolean;
   };
+  is_ranked: boolean;
 };

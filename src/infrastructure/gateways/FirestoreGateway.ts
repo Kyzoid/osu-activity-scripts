@@ -36,7 +36,7 @@ export class FirestoreGateway implements FirestoreGatewayInterface {
 
     snapshot.forEach((userDoc) => {
       const userData = userDoc.data() as FireUser;
-      users.push(new User(userData.id, userData.username, userData.accuracy, userData.globalRank, userData.pp, []));
+      users.push(new User(userData.id, userData.username, userData.accuracy, userData.globalRank, userData.playCount, userData.pp, [], userData.isRanked, userData.isActive));
     });
 
     return users;
@@ -58,8 +58,11 @@ export class FirestoreGateway implements FirestoreGatewayInterface {
       userData.username,
       userData.accuracy,
       userData.globalRank,
+      userData.playCount,
       userData.pp,
-      scores
+      scores,
+      userData.isRanked,
+      userData.isActive
     );
   }
 
@@ -78,8 +81,11 @@ export class FirestoreGateway implements FirestoreGatewayInterface {
       username: user.username,
       accuracy: user.accuracy,
       globalRank: user.globalRank,
+      playCount: user.playCount,
       pp: user.pp,
-      scores: scoresRef
+      scores: scoresRef,
+      isRanked: user.isRanked,
+      isActive: user.isActive
     };
     
     await db.collection('users').doc(id).set(data);

@@ -1,5 +1,6 @@
 export default interface UserScore {
   id: number;
+  user_id: number;
   accuracy: number;
   mods: string[]
   score: number;
