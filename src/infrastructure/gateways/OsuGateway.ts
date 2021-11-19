@@ -23,15 +23,9 @@ export class OsuGateway implements OsuGatewayInterface {
 
     return response.map((score) => {
       return new Score(
-        score.id,
-        score.accuracy,
-        score.created_at,
-        score.pp,
-        score.rank,
-        score.score,
-        `users/${score.user_id}`,
-        score.mods
-      )
+        score.id, score.accuracy, score.beatmapset.artist, score.beatmap.version, score.beatmapset.title, score.beatmap.id, score.beatmap.beatmapset_id,
+        score.created_at, score.rank, score.mods, score.pp, score.user_id, score.user.username, score.score, score.user.avatar_url
+      );
     });
   }
 
@@ -46,7 +40,6 @@ export class OsuGateway implements OsuGatewayInterface {
         stats.global_rank,
         stats.play_count,
         stats.pp,
-        [],
         stats.is_ranked,
         stats.user.is_active
       );

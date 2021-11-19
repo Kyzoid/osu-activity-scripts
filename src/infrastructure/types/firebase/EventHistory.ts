@@ -1,4 +1,5 @@
 export default interface EventHistory {
+  id: number;
   userId: number;
   username: string;
   createdAt: string;
@@ -13,5 +14,9 @@ export default interface EventHistory {
   beatmapId?: number;
   beatmapTitle?: string;
   beatmapsetId?: number;
+  artist?: string;
+  rank?: string;
   pp?: number;
+  score?: number;
+  avatarURL?: string;
 }

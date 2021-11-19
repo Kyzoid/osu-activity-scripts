@@ -3,9 +3,10 @@ dotenv.config();
 
 import axios from 'axios';
 import { OsuGateway } from './infrastructure/gateways';
-import { FirestoreGateway } from './infrastructure/gateways';
+import { FirebaseGateway } from './infrastructure/gateways';
 import { Score, User } from './core/models';
 import { GetTopFifty } from './core/commands/GetTopFifty';
+import { GetRecentTopPlays } from './core/commands/GetRecentTopPlays';
 
 const main = async () => {
   try {
@@ -17,10 +18,15 @@ const main = async () => {
     }).then(res => res.data.access_token);
 
     const osuGateway = new OsuGateway(token);
-    const firestoreGateway = new FirestoreGateway();
-    
-    const getTopFifty = new GetTopFifty(osuGateway, firestoreGateway);
+    const firebaseGateway = new FirebaseGateway();
+
+    const getTopFifty = new GetTopFifty(osuGateway, firebaseGateway);
+    const getRecentTopPlays = new GetRecentTopPlays(osuGateway, firebaseGateway);
+
+    console.log('getTopFifty');
     await getTopFifty.execute();
+    console.log('getRecentTopPlays');
+    await getRecentTopPlays.execute();
   } catch (e) {
     console.log(e);
   }

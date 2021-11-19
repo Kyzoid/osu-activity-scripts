@@ -7,7 +7,6 @@ export default interface User {
   globalRank: number;
   playCount: number;
   pp: number;
-  scores: DocumentReference[];
   isRanked: boolean;
   isActive: boolean;
 }

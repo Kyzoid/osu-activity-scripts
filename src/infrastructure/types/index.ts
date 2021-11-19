@@ -1,5 +1,5 @@
 import FireUser from './firebase/User';
-import FireScore from './firebase/Score';
+import FireJob from './firebase/Job';
 import FireEventHistory from './firebase/EventHistory';
 
 import OsuUserStatistics from './osu/UserStatistics';
@@ -21,6 +21,6 @@ enum OSU_GAME_MODE {
 }
 
 export {
-  FireUser, FireScore, FireEventHistory,
+  FireJob, FireUser, FireEventHistory,
   OSU_SCORE_TYPE, OSU_GAME_MODE, OsuUserStatistics, OsuUser, OsuUserScore, OsuRankings
 };

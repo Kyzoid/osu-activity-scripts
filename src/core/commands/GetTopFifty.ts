@@ -1,9 +1,9 @@
-import { FirestoreGatewayInterface, OsuGatewayInterface, } from '../interfaces';
+import { FirebaseGatewayInterface, OsuGatewayInterface, } from '../interfaces';
 
 export class GetTopFifty {
   constructor(
     private osuGateway: OsuGatewayInterface,
-    private firestoreGateway: FirestoreGatewayInterface
+    private firebaseGateway: FirebaseGatewayInterface
   ) { }
 
   async execute() {
@@ -11,7 +11,8 @@ export class GetTopFifty {
 
     const promises = [];
     for (const user of users) {
-      promises.push(this.firestoreGateway.setUser(user.id.toString(), user));
+      console.log('synchro: ', user.username);
+      promises.push(this.firebaseGateway.setUser(user.id.toString(), user));
     }
 
     await Promise.all(promises);

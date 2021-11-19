@@ -1,4 +1,4 @@
-import { FirestoreGateway } from './FirestoreGateway';
+import { FirebaseGateway } from './FirebaseGateway';
 import { OsuGateway } from './OsuGateway';
 
-export { FirestoreGateway, OsuGateway };
+export { FirebaseGateway, OsuGateway };

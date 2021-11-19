@@ -8,7 +8,6 @@ export default class User implements UserInterface {
     public globalRank: number,
     public playCount: number,
     public pp: number,
-    public scores: ScoreInterface[],
     public isRanked: boolean,
     public isActive: boolean,
   ) { }

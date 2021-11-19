@@ -1,4 +1,6 @@
 import Score from './Score';
 import User from './User';
+import Job from './Job';
+import PPEvent from './PPEvent';
 
-export { Score, User };
+export { Job, Score, User, PPEvent };
