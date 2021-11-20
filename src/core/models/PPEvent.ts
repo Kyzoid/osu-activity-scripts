@@ -6,6 +6,7 @@ export default class PPEvent extends Event implements PPEventInterface {
     public accuracy: number,
     public artist: string,
     public beatmapDifficulty: string,
+    public beatmapTitle: string,
     public beatmapId: number,
     public beatmapsetId: number,
     public rank: string,

@@ -27,6 +27,7 @@ const main = async () => {
     await getTopFifty.execute();
     console.log('getRecentTopPlays');
     await getRecentTopPlays.execute();
+    console.log('end');
   } catch (e) {
     console.log(e);
   }

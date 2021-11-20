@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import rateLimit from 'axios-rate-limit';
 import { User, Score } from '../../core/models';
 import { OsuGatewayInterface } from '../../core/interfaces';
 import { OSU_GAME_MODE, OsuRankings, OSU_SCORE_TYPE, OsuUserScore } from '../types';
@@ -7,15 +8,20 @@ export class OsuGateway implements OsuGatewayInterface {
   axiosInstance: AxiosInstance;
 
   constructor(token: string) {
-    this.axiosInstance = axios.create({
-      baseURL: process.env.OSU_BASE_URL,
-      timeout: 5000,
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+    this.axiosInstance = rateLimit(
+      axios.create({
+        baseURL: process.env.OSU_BASE_URL,
+        timeout: 5000,
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      }),
+      {
+        maxRPS: 1
       }
-    });
+    );
   }
 
   async getUserScores(userId: number, type: OSU_SCORE_TYPE, mode: OSU_GAME_MODE, limit: number): Promise<Score[]> {
