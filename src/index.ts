@@ -2,9 +2,9 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import axios from 'axios';
+import firebase from 'firebase-admin';
 import { OsuGateway } from './infrastructure/gateways';
 import { FirebaseGateway } from './infrastructure/gateways';
-import { Score, User } from './core/models';
 import { GetTopFifty } from './core/commands/GetTopFifty';
 import { GetRecentTopPlays } from './core/commands/GetRecentTopPlays';
 
@@ -28,11 +28,11 @@ const main = async () => {
     console.log('getRecentTopPlays');
     await getRecentTopPlays.execute();
     console.log('end');
+
+    await firebase.app().delete();
   } catch (e) {
     console.log(e);
   }
-
-  return;
 };
 
 main();
