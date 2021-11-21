@@ -1,5 +1,3 @@
-import { DocumentReference } from 'firebase/firestore';
-
 export default interface User {
   id: number;
   username: string;

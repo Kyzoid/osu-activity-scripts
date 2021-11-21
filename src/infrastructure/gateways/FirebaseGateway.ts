@@ -1,4 +1,4 @@
-import { DocumentReference, DocumentData } from 'firebase/firestore';
+import { DocumentReference, DocumentData } from 'firebase-admin/firestore';
 import { db, rt } from '../../firebaseInit';
 import { FirebaseGatewayInterface, UserInterface, ScoreInterface, JobInterface, PPEventInterface } from '../../core/interfaces';
 import { FireEventHistory, FireJob, FireUser } from '../types';

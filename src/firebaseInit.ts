@@ -1,20 +1,15 @@
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/firestore';
-import 'firebase/compat/database';
+import admin from 'firebase-admin';
+import { initializeApp } from 'firebase-admin/app';
+import { getFirestore } from 'firebase-admin/firestore';
+import { getDatabase } from 'firebase-admin/database';
 
 const config = {
-  apiKey: process.env.API_KEY,
-  authDomain: process.env.AUTH_DOMAIN,
+  credential: admin.credential.cert('./firebase-adminsdk.json'),
   databaseURL: process.env.DATABASE_URL,
-  projectId: process.env.PROJECT_ID,
-  storageBucket: process.env.STORAGE_BUCKET,
-  messagingSenderId: process.env.MESSAGING_SENDER_ID,
-  appId: process.env.APP_ID,
-  measurementId: process.env.MEASUREMENT_ID,
 };
 
-const app = firebase.initializeApp(config);
-const db = firebase.firestore();
-const rt = firebase.database();
+const app = initializeApp(config);
+const db = getFirestore();
+const rt = getDatabase();
 
 export { app, db, rt };
