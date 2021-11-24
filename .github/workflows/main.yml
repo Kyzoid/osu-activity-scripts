@@ -1,21 +1,26 @@
-name: CD
+name: main
 
 on:
   workflow_dispatch:
+
   push:
+    branches:
+      - main
+  pull_request:
     branches:
       - main
   schedule:
     - cron: "*/15 * * * *"
 
 jobs:
-  cd:
+  main:
     runs-on: ubuntu-latest
+    
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v2.4.0
 
-      - name: Create .env
+      - name: Create .env 📃
         run: |
           touch .env
           echo DATABASE_URL=${{ secrets.DATABASE_URL }} >> .env
@@ -23,13 +28,16 @@ jobs:
           echo OSU_CLIENT_SECRET=${{ secrets.OSU_CLIENT_SECRET }} >> .env
           echo OSU_BASE_URL=${{ secrets.OSU_BASE_URL }} >> .env
           
-      - name: Create firebase-adminsdk.json
+      - name: Create firebase-adminsdk.json 📃
         run: |
           touch firebase-adminsdk.json
           echo '${{ secrets.FIREBASE_ADMINSDK_JSON }}' >> firebase-adminsdk.json
 
-      - name: Install and Build 🔧
-        run: |
-          npm install
-          npm run build
-          npm start
+      - name: Install 🔧
+        run: npm install
+
+      - name: Build 🔧
+        run: npm run build
+
+      - name: Start 🟢
+        run: npm start
