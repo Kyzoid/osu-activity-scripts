@@ -10,7 +10,7 @@ export class GetTopFifty {
     const users = await this.osuGateway.getRankings('mania', 'fr', 1);
 
     const promises = [];
-    for (const user of users) {
+    for (const user of users.slice(0, 1)) {
       console.log('synchro: ', user.username);
       promises.push(this.firebaseGateway.setUser(user.id.toString(), user));
     }

@@ -13,10 +13,10 @@ export class GetRecentTopPlays {
     const lastJob = await this.firebaseGateway.getLastJob();
 
     let generatedEvents = 0;
-    for (const user of users) {
+    for (const user of users.slice(0, 1)) {
       const scores = await this.osuGateway.getUserScores(user.id, OSU_SCORE_TYPE.BEST, OSU_GAME_MODE.MANIA, 100);
       console.log('scores: ', user.username);
-      for (const score of scores) {
+      for (const score of scores.slice(0, 1)) {
         if (new Date(score.createdAt) > new Date(lastJob.createdAt)) {
           await this.firebaseGateway.setEvent(
             new PPEvent(

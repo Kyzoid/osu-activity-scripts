@@ -1,8 +1,8 @@
 import { DocumentReference, DocumentData } from 'firebase-admin/firestore';
 import { db, rt } from '../../firebaseInit';
-import { FirebaseGatewayInterface, UserInterface, ScoreInterface, JobInterface, PPEventInterface } from '../../core/interfaces';
-import { FireEventHistory, FireJob, FireUser } from '../types';
-import { User, Job } from '../../core/models';
+import { FirebaseGatewayInterface, UserInterface, ScoreInterface, JobInterface, PPEventInterface, BeatmapInterface } from '../../core/interfaces';
+import { FireEventHistory, FireJob, FireUser, FireBeatmap } from '../types';
+import { User, Job, Beatmap } from '../../core/models';
 
 export class FirebaseGateway implements FirebaseGatewayInterface {
   async setLastJob(count: number, createdAt: string): Promise<void> {
@@ -75,6 +75,65 @@ export class FirebaseGateway implements FirebaseGatewayInterface {
     };
     
     await db.collection('users').doc(id).set(data);
+
+    return;
+  }
+
+  async getBeatmaps(): Promise<BeatmapInterface[]> {
+    const beatmaps: BeatmapInterface[] = [];
+    const snapshot = await db.collection('beatmaps').get();
+
+    snapshot.forEach((beatmapDoc) => {
+      const beatmapData = beatmapDoc.data() as FireBeatmap;
+      beatmaps.push(new Beatmap(
+        beatmapData.id,
+        beatmapData.beatmapsetId,
+        beatmapData.artist,
+        beatmapData.creator,
+        beatmapData.title,
+        beatmapData.difficultyRating,
+        beatmapData.version,
+        beatmapData.mode,
+      ));
+    });
+
+    return beatmaps;
+  }
+
+  async getBeatmap(id: string): Promise<BeatmapInterface | undefined> {
+    const beatmapDoc = await db.collection('beatmaps').doc(id).get();
+
+    if (!beatmapDoc.exists) {
+      return;
+    }
+
+    const beatmapData = beatmapDoc.data() as FireBeatmap;
+
+    return new Beatmap(
+      beatmapData.id,
+      beatmapData.beatmapsetId,
+      beatmapData.artist,
+      beatmapData.creator,
+      beatmapData.title,
+      beatmapData.difficultyRating,
+      beatmapData.version,
+      beatmapData.mode,
+    );
+  }
+
+  async setBeatmap(id: string, beatmap: BeatmapInterface): Promise<void> {
+    const data: FireBeatmap = {
+      id: beatmap.id,
+      beatmapsetId: beatmap.beatmapsetId,
+      artist: beatmap.artist,
+      creator: beatmap.creator,
+      title: beatmap.title,
+      difficultyRating: beatmap.difficultyRating,
+      version: beatmap.version,
+      mode: beatmap.mode,
+    };
+    
+    await db.collection('beatmaps').doc(id).set(data);
 
     return;
   }

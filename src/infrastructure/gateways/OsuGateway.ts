@@ -1,8 +1,9 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import rateLimit from 'axios-rate-limit';
-import { User, Score } from '../../core/models';
+import { User, Score, Beatmap } from '../../core/models';
 import { OsuGatewayInterface } from '../../core/interfaces';
-import { OSU_GAME_MODE, OsuRankings, OSU_SCORE_TYPE, OsuUserScore } from '../types';
+import { OSU_GAME_MODE, OsuRankings, OSU_SCORE_TYPE, OsuUserScore, OsuBeatmapsetSearchResults, OsuBeatmapsetFilter } from '../types';
+import { URLSearchParams } from 'url';
 
 export class OsuGateway implements OsuGatewayInterface {
   axiosInstance: AxiosInstance;
@@ -22,6 +23,50 @@ export class OsuGateway implements OsuGatewayInterface {
         maxRPS: 1
       }
     );
+  }
+
+  async searchBeatmapsets(filters: OsuBeatmapsetFilter): Promise<{ beatmaps: Beatmap[], _id: string | undefined, approved_date: string | undefined }> {
+    const searchParams = new URLSearchParams();
+    filters.s ? searchParams.append('s', filters.s) : '';
+    filters.m ? searchParams.append('m', filters.m.toString()) : '';
+    filters.approved_date ? searchParams.append('cursor[approved_date]', filters.approved_date) : '';
+    filters._id ? searchParams.append('cursor[_id]', filters._id) : '';
+
+    console.log(searchParams.toString())
+    const response = await this.axiosInstance.get<OsuBeatmapsetSearchResults>(`/beatmapsets/search?${searchParams.toString()}`).then((res) => res.data);
+    console.log(response.cursor);
+    const beatmaps: Beatmap[] = [];
+
+    for (const beatmapset of response.beatmapsets) {
+      if (beatmapset.beatmaps) {
+        for (const beatmap of beatmapset.beatmaps) {
+          if (beatmap.mode_int === 3) {
+            beatmaps.push(
+              new Beatmap(
+                beatmap.id,
+                beatmap.beatmapset_id,
+                beatmapset.artist,
+                beatmapset.creator,
+                beatmapset.title,
+                beatmap.difficulty_rating,
+                beatmap.version,
+                'mania'
+              )
+            );
+          }
+        }
+      }
+    }
+
+    return {
+      beatmaps,
+      _id: response.cursor?._id,
+      approved_date: response.cursor?.approved_date,
+    };
+  }
+
+  async getBeatmapScores(mode: string, type: string): Promise<Score[]> {
+    return [];
   }
 
   async getUserScores(userId: number, type: OSU_SCORE_TYPE, mode: OSU_GAME_MODE, limit: number): Promise<Score[]> {
