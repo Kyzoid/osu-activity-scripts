@@ -2,7 +2,7 @@ import { UserInterface, JobInterface, PPEventInterface, BeatmapInterface } from 
 
 export interface FirebaseGatewayInterface {
   getUsers(): Promise<UserInterface[]>
-  getUser(id: string): Promise<UserInterface>
+  getUser(id: string): Promise<UserInterface | undefined>
   setUser(id: string, user: UserInterface): Promise<void>
 
   getBeatmaps(): Promise<BeatmapInterface[]>

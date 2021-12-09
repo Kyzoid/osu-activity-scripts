@@ -6,6 +6,7 @@ import firebase from 'firebase-admin';
 import { OsuGateway } from './infrastructure/gateways';
 import { FirebaseGateway } from './infrastructure/gateways';
 import { SynchronizeBeatmaps } from './core/commands/SynchronizeBeatmaps';
+import { SynchronizeCountryFirstPlaces } from './core/commands/SynchronizeCountryFirstPlaces';
 import { GetTopFifty } from './core/commands/GetTopFifty';
 import { GetRecentTopPlays } from './core/commands/GetRecentTopPlays';
 
@@ -27,16 +28,22 @@ const main = async () => {
     const firebaseGateway = new FirebaseGateway();
 
     const synchronizeBeatmaps = new SynchronizeBeatmaps(osuGateway, firebaseGateway);
-    // const getTopFifty = new GetTopFifty(osuGateway, firebaseGateway);
-    // const getRecentTopPlays = new GetRecentTopPlays(osuGateway, firebaseGateway);
+    const synchronizeCountryFirstPlaces = new SynchronizeCountryFirstPlaces(osuGateway, firebaseGateway);
+    const getTopFifty = new GetTopFifty(osuGateway, firebaseGateway);
+    const getRecentTopPlays = new GetRecentTopPlays(osuGateway, firebaseGateway);
 
-    console.log('synchronizeBeatmaps');
-    await synchronizeBeatmaps.execute();
-
+    // console.log('synchronizeBeatmaps');
+    // await synchronizeBeatmaps.execute();
+    
     // console.log('getTopFifty');
     // await getTopFifty.execute();
+
     // console.log('getRecentTopPlays');
     // await getRecentTopPlays.execute();
+
+    // console.log('synchronizeCountryFirstPlaces');
+    // await synchronizeCountryFirstPlaces.execute();
+    
     console.log('end');
 
     await firebase.app().delete();

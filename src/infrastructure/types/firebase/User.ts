@@ -7,4 +7,5 @@ export default interface User {
   pp: number;
   isRanked: boolean;
   isActive: boolean;
+  countryFirstPlaces?: number[];
 }

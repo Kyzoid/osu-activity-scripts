@@ -1,8 +1,8 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import rateLimit from 'axios-rate-limit';
-import { User, Score, Beatmap } from '../../core/models';
+import { User, Score, Beatmap, BeatmapScore } from '../../core/models';
 import { OsuGatewayInterface } from '../../core/interfaces';
-import { OSU_GAME_MODE, OsuRankings, OSU_SCORE_TYPE, OsuUserScore, OsuBeatmapsetSearchResults, OsuBeatmapsetFilter } from '../types';
+import { OSU_GAME_MODE, OsuRankings, OSU_SCORE_TYPE, OsuUserScore, OsuBeatmapsetSearchResults, OsuBeatmapsetFilter, OsuBeatmapScores } from '../types';
 import { URLSearchParams } from 'url';
 
 export class OsuGateway implements OsuGatewayInterface {
@@ -65,8 +65,14 @@ export class OsuGateway implements OsuGatewayInterface {
     };
   }
 
-  async getBeatmapScores(mode: string, type: string): Promise<Score[]> {
-    return [];
+  async getBeatmapScores(beatmapId: number, mode: string, type: string): Promise<BeatmapScore[]> {
+    const response = await this.axiosInstance.get<OsuBeatmapScores>(`/beatmaps/${beatmapId}/scores?mode=${mode}&type=${type}`).then((res) => res.data);
+
+    return response.scores.map((score) => {
+      return new BeatmapScore(
+        score.id, score.user_id, score.accuracy, score.mods, score.score, score.max_combo, score.rank, score.created_at, score.pp, score.mode
+      );
+    });
   }
 
   async getUserScores(userId: number, type: OSU_SCORE_TYPE, mode: OSU_GAME_MODE, limit: number): Promise<Score[]> {

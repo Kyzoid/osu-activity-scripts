@@ -6,6 +6,8 @@ import FireBeatmap from './firebase/Beatmap';
 import OsuUserStatistics from './osu/UserStatistics';
 import OsuUser from './osu/User';
 import OsuUserScore from './osu/UserScore';
+import OsuBeatmapScore from './osu/BeatmapScore';
+import OsuBeatmapScores from './osu/BeatmapScores';
 import OsuRankings from './osu/Rankings';
 import OsuBeatmapsetSearchResults from './osu/BeatmapsetSearchResults';
 import OsuBeatmapsetFilter from './osu/BeatmapsetFilter';
@@ -25,5 +27,5 @@ enum OSU_GAME_MODE {
 
 export {
   FireJob, FireUser, FireEventHistory, FireBeatmap,
-  OSU_SCORE_TYPE, OSU_GAME_MODE, OsuUserStatistics, OsuUser, OsuUserScore, OsuRankings, OsuBeatmapsetSearchResults, OsuBeatmapsetFilter
+  OSU_SCORE_TYPE, OSU_GAME_MODE, OsuUserStatistics, OsuUser, OsuUserScore, OsuRankings, OsuBeatmapsetSearchResults, OsuBeatmapsetFilter, OsuBeatmapScore, OsuBeatmapScores
 };

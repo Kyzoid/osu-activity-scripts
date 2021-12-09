@@ -9,4 +9,5 @@ export default interface UserInterface {
   pp: number;
   isRanked: boolean;
   isActive: boolean;
+  countryFirstPlaces?: number[];
 }

@@ -1,5 +1,5 @@
-import Score from './Score';
+import BeatmapScore from './BeatmapScore';
 
 export default interface BeatmapScores {
-  scores: Score[];
+  scores: BeatmapScore[];
 }

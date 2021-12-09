@@ -35,17 +35,17 @@ export class FirebaseGateway implements FirebaseGatewayInterface {
 
     snapshot.forEach((userDoc) => {
       const userData = userDoc.data() as FireUser;
-      users.push(new User(userData.id, userData.username, userData.accuracy, userData.globalRank, userData.playCount, userData.pp, userData.isRanked, userData.isActive));
+      users.push(new User(userData.id, userData.username, userData.accuracy, userData.globalRank, userData.playCount, userData.pp, userData.isRanked, userData.isActive, userData.countryFirstPlaces));
     });
 
     return users;
   }
 
-  async getUser(id: string): Promise<UserInterface> {
+  async getUser(id: string): Promise<UserInterface | undefined> {
     const userDoc = await db.collection('users').doc(id).get();
 
     if (!userDoc.exists) {
-      throw new Error(`Document /users/${id} not found`);
+      return;
     }
 
     const userData = userDoc.data() as FireUser;
@@ -58,7 +58,8 @@ export class FirebaseGateway implements FirebaseGatewayInterface {
       userData.playCount,
       userData.pp,
       userData.isRanked,
-      userData.isActive
+      userData.isActive,
+      userData.countryFirstPlaces
     );
   }
 
@@ -73,8 +74,12 @@ export class FirebaseGateway implements FirebaseGatewayInterface {
       isRanked: user.isRanked,
       isActive: user.isActive
     };
+
+    if (user.countryFirstPlaces) {
+      data.countryFirstPlaces = user.countryFirstPlaces;
+    }
     
-    await db.collection('users').doc(id).set(data);
+    await db.collection('users').doc(id).set(data, { merge: true });
 
     return;
   }
