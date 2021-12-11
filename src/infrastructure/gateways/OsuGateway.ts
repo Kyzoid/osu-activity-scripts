@@ -2,7 +2,7 @@ import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import rateLimit from 'axios-rate-limit';
 import { User, Score, Beatmap, BeatmapScore } from '../../core/models';
 import { OsuGatewayInterface } from '../../core/interfaces';
-import { OSU_GAME_MODE, OsuRankings, OSU_SCORE_TYPE, OsuUserScore, OsuBeatmapsetSearchResults, OsuBeatmapsetFilter, OsuBeatmapScores } from '../types';
+import { OSU_GAME_MODE, OsuRankings, OSU_SCORE_TYPE, OsuUserScore, OsuBeatmapsetSearchResults, OsuBeatmapsetFilter, OsuBeatmapScores, OsuUser } from '../types';
 import { URLSearchParams } from 'url';
 
 export class OsuGateway implements OsuGatewayInterface {
@@ -12,7 +12,7 @@ export class OsuGateway implements OsuGatewayInterface {
     this.axiosInstance = rateLimit(
       axios.create({
         baseURL: process.env.OSU_BASE_URL,
-        timeout: 5000,
+        timeout: 20000,
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
@@ -20,7 +20,8 @@ export class OsuGateway implements OsuGatewayInterface {
         }
       }),
       {
-        maxRPS: 1
+        maxRequests: 1,
+        perMilliseconds: 2000
       }
     );
   }
@@ -101,5 +102,20 @@ export class OsuGateway implements OsuGatewayInterface {
         stats.user.is_active
       );
     });
+  }
+
+  async getUser(userId: number): Promise<User> {
+    const user = await this.axiosInstance.get<OsuUser>(`/users/${userId}/mania?key=id`).then((res) => res.data);
+
+    return new User(
+      user.id,
+      user.username,
+      user.statistics.hit_accuracy,
+      user.statistics.global_rank,
+      user.statistics.play_count,
+      user.statistics.pp,
+      user.statistics.is_ranked,
+      true
+    );
   }
 }

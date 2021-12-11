@@ -6,5 +6,6 @@ export default interface User {
     play_count: number;
     hit_accuracy: number;
     pp: number;
+    is_ranked: boolean;
   }
 }

@@ -9,6 +9,7 @@ export class SynchronizeCountryFirstPlaces {
   async execute() {
     const beatmaps = await this.firebaseGateway.getBeatmaps();
     const users = await this.firebaseGateway.getUsers();
+    // on devrait créer les users qui ont des premieres place mais nexiste pas dans le top 50
 
     const usersFirstPlaces = users.reduce((acc: { [key: string]: number[] }, user) => {
       acc[user.id] = [];
@@ -17,21 +18,26 @@ export class SynchronizeCountryFirstPlaces {
 
     let beatmapIndex = 1;
     for (const beatmap of beatmaps) {
-      console.log(`SynchronizeCFP: ${beatmapIndex}/${beatmaps.length} beatmaps...`);
+      console.log(`SynchronizeCFP: ${beatmapIndex}/${beatmaps.length} beatmaps... (${beatmap.id})`);
       beatmapIndex++;
 
       const beatmapScores = await this.osuGateway.getBeatmapScores(beatmap.id, 'mania', 'country');
-      const firstPlaceScore = beatmapScores[0];
+      if (beatmapScores.length) {
+        const firstPlaceScore = beatmapScores[0];
       
-      const user = users.find(u => u.id === firstPlaceScore.userId);
-      if (!user) continue;
-      
-      usersFirstPlaces[firstPlaceScore.userId].push(beatmap.id);
+        if (usersFirstPlaces[firstPlaceScore.userId]) {
+          usersFirstPlaces[firstPlaceScore.userId].push(beatmap.id);
+        } else {
+          const newUser = await this.osuGateway.getUser(firstPlaceScore.userId);
+          users.push(newUser);
+          usersFirstPlaces[firstPlaceScore.userId].push(beatmap.id);
+        }
+      }
     }
 
     let userIndex = 1;
     for (const user of users) {
-      console.log(`Saving usersCFP: ${userIndex}/${users.length} users...`);
+      console.log(`Saving user: ${userIndex}/${users.length} users... (${user.id})`);
       user.countryFirstPlaces = usersFirstPlaces[user.id];
       await this.firebaseGateway.setUser(user.id.toString(), user);
       userIndex++;

@@ -6,4 +6,5 @@ export interface OsuGatewayInterface {
   getUserScores(userId: number, type: OSU_SCORE_TYPE, mode: OSU_GAME_MODE, limit: number): Promise<Score[]>
   searchBeatmapsets(filters: {}): Promise<{ beatmaps: Beatmap[], _id: string | undefined, approved_date: string | undefined }>
   getBeatmapScores(beatmapId: number, mode: string, type: string): Promise<BeatmapScore[]>
+  getUser(userId: number): Promise<User>
 }
