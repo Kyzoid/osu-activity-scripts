@@ -21,7 +21,7 @@ export class OsuGateway implements OsuGatewayInterface {
       }),
       {
         maxRequests: 1,
-        perMilliseconds: 2000
+        perMilliseconds: 1100
       }
     );
   }

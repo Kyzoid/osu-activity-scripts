@@ -9,7 +9,6 @@ export class SynchronizeCountryFirstPlaces {
   async execute() {
     const beatmaps = await this.firebaseGateway.getBeatmaps();
     const users = await this.firebaseGateway.getUsers();
-    // on devrait créer les users qui ont des premieres place mais nexiste pas dans le top 50
 
     const usersFirstPlaces = users.reduce((acc: { [key: string]: number[] }, user) => {
       acc[user.id] = [];
@@ -28,9 +27,10 @@ export class SynchronizeCountryFirstPlaces {
         if (usersFirstPlaces[firstPlaceScore.userId]) {
           usersFirstPlaces[firstPlaceScore.userId].push(beatmap.id);
         } else {
+          console.log(`Creating user (${firstPlaceScore.userId})`);
           const newUser = await this.osuGateway.getUser(firstPlaceScore.userId);
           users.push(newUser);
-          usersFirstPlaces[firstPlaceScore.userId].push(beatmap.id);
+          usersFirstPlaces[firstPlaceScore.userId] = [beatmap.id];
         }
       }
     }
