@@ -115,7 +115,8 @@ export class OsuGateway implements OsuGatewayInterface {
       user.statistics.play_count,
       user.statistics.pp,
       user.statistics.is_ranked,
-      true
+      true,
+      user.statistics.country_rank
     );
   }
 }

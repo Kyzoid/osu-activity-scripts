@@ -5,9 +5,11 @@ export default interface UserInterface {
   username: string;
   accuracy: number;
   globalRank: number;
+  countryRank?: number;
   playCount: number;
   pp: number;
   isRanked: boolean;
   isActive: boolean;
   countryFirstPlaces?: number[];
+  countryFirstPlacesCount?: number;
 }

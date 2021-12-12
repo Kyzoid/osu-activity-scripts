@@ -10,6 +10,8 @@ export default class User implements UserInterface {
     public pp: number,
     public isRanked: boolean,
     public isActive: boolean,
+    public countryRank?: number,
     public countryFirstPlaces?: number[],
+    public countryFirstPlacesCount?: number,
   ) { }
 }

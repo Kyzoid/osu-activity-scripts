@@ -35,7 +35,19 @@ export class FirebaseGateway implements FirebaseGatewayInterface {
 
     snapshot.forEach((userDoc) => {
       const userData = userDoc.data() as FireUser;
-      users.push(new User(userData.id, userData.username, userData.accuracy, userData.globalRank, userData.playCount, userData.pp, userData.isRanked, userData.isActive, userData.countryFirstPlaces));
+      users.push(new User(userData.id, userData.username, userData.accuracy, userData.globalRank, userData.playCount, userData.pp, userData.isRanked, userData.isActive, userData.countryRank, userData.countryFirstPlaces, userData.countryFirstPlacesCount));
+    });
+
+    return users;
+  }
+
+  async getTopFiftyUsers(): Promise<UserInterface[]> {
+    const users: UserInterface[] = [];
+    const snapshot = await db.collection('users').where('countryRank', '<=', 50).get();
+
+    snapshot.forEach((userDoc) => {
+      const userData = userDoc.data() as FireUser;
+      users.push(new User(userData.id, userData.username, userData.accuracy, userData.globalRank, userData.playCount, userData.pp, userData.isRanked, userData.isActive, userData.countryRank, userData.countryFirstPlaces, userData.countryFirstPlacesCount));
     });
 
     return users;
@@ -59,7 +71,9 @@ export class FirebaseGateway implements FirebaseGatewayInterface {
       userData.pp,
       userData.isRanked,
       userData.isActive,
-      userData.countryFirstPlaces
+      userData.countryRank,
+      userData.countryFirstPlaces,
+      userData.countryFirstPlacesCount,
     );
   }
 
@@ -75,8 +89,13 @@ export class FirebaseGateway implements FirebaseGatewayInterface {
       isActive: user.isActive
     };
 
+    if (user.countryRank) {
+      data.countryRank = user.countryRank;
+    }
+
     if (user.countryFirstPlaces) {
       data.countryFirstPlaces = user.countryFirstPlaces;
+      data.countryFirstPlacesCount = user.countryFirstPlaces.length;
     }
     
     await db.collection('users').doc(id).set(data, { merge: true });

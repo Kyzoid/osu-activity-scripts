@@ -1,21 +1,21 @@
-import { FirebaseGatewayInterface, OsuGatewayInterface, } from '../interfaces';
+import { FirebaseGatewayInterface, OsuGatewayInterface } from '../interfaces';
 
-export class GetTopFifty {
+export class _Helper {
   constructor(
     private osuGateway: OsuGatewayInterface,
     private firebaseGateway: FirebaseGatewayInterface
   ) { }
 
   async execute() {
-    const users = await this.osuGateway.getRankings('mania', 'fr', 1);
+    const users = await this.firebaseGateway.getUsers();
 
-    let index = 1;
+    let userIndex = 1;
     for (const user of users) {
-      console.log(`GetTopFifty: ${index}/${users.length}... (${user.username})`);
+      console.log(`Saving user: ${userIndex}/${users.length} users... (${user.id})`);
       const osuUser = await this.osuGateway.getUser(user.id);
       user.countryRank = osuUser.countryRank;
       await this.firebaseGateway.setUser(user.id.toString(), user);
-      index++;
+      userIndex++;
     }
 
     return;

@@ -9,10 +9,11 @@ export class GetRecentTopPlays {
   ) { }
 
   async execute() {
-    const users = await this.firebaseGateway.getUsers();
+    const users = await this.firebaseGateway.getTopFiftyUsers();
     const lastJob = await this.firebaseGateway.getLastJob();
 
     let generatedEvents = 0;
+    console.log(users.length);
     for (const user of users.slice(0, 1)) {
       const scores = await this.osuGateway.getUserScores(user.id, OSU_SCORE_TYPE.BEST, OSU_GAME_MODE.MANIA, 100);
       console.log('scores: ', user.username);
