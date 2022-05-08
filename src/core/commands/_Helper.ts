@@ -1,4 +1,4 @@
-import { FirebaseGatewayInterface, OsuGatewayInterface } from '../interfaces';
+import { FirebaseGatewayInterface, OsuGatewayInterface, } from '../interfaces';
 
 export class _Helper {
   constructor(
@@ -7,16 +7,18 @@ export class _Helper {
   ) { }
 
   async execute() {
-    const users = await this.firebaseGateway.getUsers();
+    const beatmaps = await this.firebaseGateway.getBeatmaps();
 
-    let userIndex = 1;
-    for (const user of users) {
-      console.log(`Saving user: ${userIndex}/${users.length} users... (${user.id})`);
-      const osuUser = await this.osuGateway.getUser(user.id);
-      user.countryRank = osuUser.countryRank;
-      await this.firebaseGateway.setUser(user.id.toString(), user);
-      userIndex++;
+    const promises = [];
+
+    console.log('Beatmaps: ', beatmaps.length);
+
+    for (const beatmap of beatmaps) {
+      console.log('synchro beatmap: ', beatmap.id);
+      promises.push(this.firebaseGateway.setBeatmap(beatmap.id.toString(), beatmap));
     }
+
+    await Promise.all(promises);
 
     return;
   }

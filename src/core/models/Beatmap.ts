@@ -10,5 +10,11 @@ export default class Beatmap implements BeatmapInterface {
     public difficultyRating: number,
     public version: string,
     public mode: string,
+    public keys: string,
   ) { }
+
+  static getKeysFromBeatmapVersion(version: string): string {
+    const match = version.match(/\dK/);
+    return match ? match[0] : '0K';
+  }
 }

@@ -7,4 +7,5 @@ export default interface BeatmapInterface {
   difficultyRating: number;
   version: string;
   mode: string;
+  keys: string;
 }

@@ -10,6 +10,10 @@ export default interface UserInterface {
   pp: number;
   isRanked: boolean;
   isActive: boolean;
-  countryFirstPlaces?: number[];
-  countryFirstPlacesCount?: number;
+  countryFirstPlaces?: UserCountryFirstPlaceType[];
+}
+
+export type UserCountryFirstPlaceType = {
+  beatmapId: number;
+  keys: string;
 }

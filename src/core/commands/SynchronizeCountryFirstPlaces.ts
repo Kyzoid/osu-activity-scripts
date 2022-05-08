@@ -1,4 +1,5 @@
 import { FirebaseGatewayInterface, OsuGatewayInterface } from '../interfaces';
+import { UserCountryFirstPlaceType } from '../interfaces/UserInterface';
 
 export class SynchronizeCountryFirstPlaces {
   constructor(
@@ -10,7 +11,7 @@ export class SynchronizeCountryFirstPlaces {
     const beatmaps = await this.firebaseGateway.getBeatmaps();
     const users = await this.firebaseGateway.getUsers();
 
-    const usersFirstPlaces = users.reduce((acc: { [key: string]: number[] }, user) => {
+    const usersFirstPlaces = users.reduce((acc: { [key: string]: UserCountryFirstPlaceType[] }, user) => {
       acc[user.id] = [];
       return acc;
     }, {});
@@ -25,12 +26,12 @@ export class SynchronizeCountryFirstPlaces {
         const firstPlaceScore = beatmapScores[0];
       
         if (usersFirstPlaces[firstPlaceScore.userId]) {
-          usersFirstPlaces[firstPlaceScore.userId].push(beatmap.id);
+          usersFirstPlaces[firstPlaceScore.userId].push({ beatmapId: beatmap.id, keys: beatmap.keys });
         } else {
           console.log(`Creating user (${firstPlaceScore.userId})`);
           const newUser = await this.osuGateway.getUser(firstPlaceScore.userId);
           users.push(newUser);
-          usersFirstPlaces[firstPlaceScore.userId] = [beatmap.id];
+          usersFirstPlaces[firstPlaceScore.userId] = [{ beatmapId: beatmap.id, keys: beatmap.keys }];
         }
       }
     }

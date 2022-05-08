@@ -3,3 +3,5 @@ build
 .env
 dist
 firebase-adminsdk.json
+.vscode
+.idea

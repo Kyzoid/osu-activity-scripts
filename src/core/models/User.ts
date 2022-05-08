@@ -1,4 +1,5 @@
 import { UserInterface, ScoreInterface } from '../interfaces';
+import { UserCountryFirstPlaceType } from '../interfaces/UserInterface';
 
 export default class User implements UserInterface {
   constructor(
@@ -11,7 +12,7 @@ export default class User implements UserInterface {
     public isRanked: boolean,
     public isActive: boolean,
     public countryRank?: number,
-    public countryFirstPlaces?: number[],
+    public countryFirstPlaces?: UserCountryFirstPlaceType[],
     public countryFirstPlacesCount?: number,
   ) { }
 }

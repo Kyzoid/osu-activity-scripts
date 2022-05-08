@@ -1,3 +1,5 @@
+import { UserCountryFirstPlaceType } from "src/core/interfaces/UserInterface";
+
 export default interface User {
   id: number;
   username: string;
@@ -8,6 +10,5 @@ export default interface User {
   isRanked: boolean;
   isActive: boolean;
   countryRank?: number;
-  countryFirstPlaces?: number[];
-  countryFirstPlacesCount?: number;
+  countryFirstPlaces?: UserCountryFirstPlaceType[];
 }

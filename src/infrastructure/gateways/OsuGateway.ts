@@ -51,7 +51,8 @@ export class OsuGateway implements OsuGatewayInterface {
                 beatmapset.title,
                 beatmap.difficulty_rating,
                 beatmap.version,
-                'mania'
+                'mania',
+                Beatmap.getKeysFromBeatmapVersion(beatmap.version)
               )
             );
           }

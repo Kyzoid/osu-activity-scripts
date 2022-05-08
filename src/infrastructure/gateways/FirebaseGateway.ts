@@ -35,7 +35,7 @@ export class FirebaseGateway implements FirebaseGatewayInterface {
 
     snapshot.forEach((userDoc) => {
       const userData = userDoc.data() as FireUser;
-      users.push(new User(userData.id, userData.username, userData.accuracy, userData.globalRank, userData.playCount, userData.pp, userData.isRanked, userData.isActive, userData.countryRank, userData.countryFirstPlaces, userData.countryFirstPlacesCount));
+      users.push(new User(userData.id, userData.username, userData.accuracy, userData.globalRank, userData.playCount, userData.pp, userData.isRanked, userData.isActive, userData.countryRank, userData.countryFirstPlaces));
     });
 
     return users;
@@ -47,7 +47,7 @@ export class FirebaseGateway implements FirebaseGatewayInterface {
 
     snapshot.forEach((userDoc) => {
       const userData = userDoc.data() as FireUser;
-      users.push(new User(userData.id, userData.username, userData.accuracy, userData.globalRank, userData.playCount, userData.pp, userData.isRanked, userData.isActive, userData.countryRank, userData.countryFirstPlaces, userData.countryFirstPlacesCount));
+      users.push(new User(userData.id, userData.username, userData.accuracy, userData.globalRank, userData.playCount, userData.pp, userData.isRanked, userData.isActive, userData.countryRank, userData.countryFirstPlaces));
     });
 
     return users;
@@ -73,7 +73,6 @@ export class FirebaseGateway implements FirebaseGatewayInterface {
       userData.isActive,
       userData.countryRank,
       userData.countryFirstPlaces,
-      userData.countryFirstPlacesCount,
     );
   }
 
@@ -95,12 +94,15 @@ export class FirebaseGateway implements FirebaseGatewayInterface {
 
     if (user.countryFirstPlaces) {
       data.countryFirstPlaces = user.countryFirstPlaces;
-      data.countryFirstPlacesCount = user.countryFirstPlaces.length;
     }
     
     await db.collection('users').doc(id).set(data, { merge: true });
 
     return;
+  }
+
+  async setUserCountryFirstPlaces() {
+    
   }
 
   async getBeatmaps(): Promise<BeatmapInterface[]> {
@@ -118,6 +120,7 @@ export class FirebaseGateway implements FirebaseGatewayInterface {
         beatmapData.difficultyRating,
         beatmapData.version,
         beatmapData.mode,
+        beatmapData.keys
       ));
     });
 
@@ -142,6 +145,7 @@ export class FirebaseGateway implements FirebaseGatewayInterface {
       beatmapData.difficultyRating,
       beatmapData.version,
       beatmapData.mode,
+      beatmapData.keys
     );
   }
 
@@ -155,6 +159,7 @@ export class FirebaseGateway implements FirebaseGatewayInterface {
       difficultyRating: beatmap.difficultyRating,
       version: beatmap.version,
       mode: beatmap.mode,
+      keys: Beatmap.getKeysFromBeatmapVersion(beatmap.version)
     };
     
     await db.collection('beatmaps').doc(id).set(data);

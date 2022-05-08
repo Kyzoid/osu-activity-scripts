@@ -18,7 +18,7 @@ export class SynchronizeBeatmaps {
     while (hasNext) {
       const beatmapsResults = await this.osuGateway.searchBeatmapsets(filters);
       console.log('beatmaps: ', beatmapsResults.beatmaps.length);
-      const fireResult = await this.setBeatmaps(beatmapsResults.beatmaps);
+      const fireResult = await this.saveBeatmaps(beatmapsResults.beatmaps);
       hasNext = fireResult.hasNext;
 
       if (!beatmapsResults._id || !beatmapsResults.approved_date) {
@@ -31,7 +31,7 @@ export class SynchronizeBeatmaps {
     return;
   }
 
-  private async setBeatmaps(beatmaps: Beatmap[]): Promise<{ hasNext: boolean }> {
+  private async saveBeatmaps(beatmaps: Beatmap[]): Promise<{ hasNext: boolean }> {
     const promises = [];
     let index = 0;
     let hasNext = true;
