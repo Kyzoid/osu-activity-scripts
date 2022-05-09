@@ -95,6 +95,10 @@ export class FirebaseGateway implements FirebaseGatewayInterface {
     if (user.countryFirstPlaces) {
       data.countryFirstPlaces = user.countryFirstPlaces;
     }
+
+    if (user.countryFirstPlacesCount) {
+      data.countryFirstPlacesCount = user.countryFirstPlacesCount;
+    }
     
     await db.collection('users').doc(id).set(data, { merge: true });
 

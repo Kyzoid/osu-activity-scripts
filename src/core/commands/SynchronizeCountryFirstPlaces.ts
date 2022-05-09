@@ -1,5 +1,5 @@
 import { FirebaseGatewayInterface, OsuGatewayInterface } from '../interfaces';
-import { UserCountryFirstPlaceType } from '../interfaces/UserInterface';
+import { UserCountryFirstPlaceType, UserKeysType } from '../interfaces/UserInterface';
 
 export class SynchronizeCountryFirstPlaces {
   constructor(
@@ -11,8 +11,13 @@ export class SynchronizeCountryFirstPlaces {
     const beatmaps = await this.firebaseGateway.getBeatmaps();
     const users = await this.firebaseGateway.getUsers();
 
-    const usersFirstPlaces = users.reduce((acc: { [key: string]: UserCountryFirstPlaceType[] }, user) => {
+    const usersFirstPlaces = users.reduce((acc: { [userId: string]: UserCountryFirstPlaceType[] }, user) => {
       acc[user.id] = [];
+      return acc;
+    }, {});
+
+    const usersFirstPlacesCount = users.reduce((acc: { [userId: string]: { [keys in UserKeysType]: number } }, user) => {
+      acc[user.id] = { '4K': 0, '7K': 0, 'XK': 0 };
       return acc;
     }, {});
 
@@ -32,7 +37,20 @@ export class SynchronizeCountryFirstPlaces {
           const newUser = await this.osuGateway.getUser(firstPlaceScore.userId);
           users.push(newUser);
           usersFirstPlaces[firstPlaceScore.userId] = [{ beatmapId: beatmap.id, keys: beatmap.keys }];
+          usersFirstPlacesCount[firstPlaceScore.userId] = { '4K': 0, '7K': 0, 'XK': 0 };
         }
+
+        switch(beatmap.keys) {
+          case '4K':
+            usersFirstPlacesCount[firstPlaceScore.userId]['4K'] += 1;
+            break;
+          case '7K':
+            usersFirstPlacesCount[firstPlaceScore.userId]['7K'] += 1;
+            break;
+          default:
+            usersFirstPlacesCount[firstPlaceScore.userId]['XK'] += 1;
+        }
+
       }
     }
 
@@ -40,6 +58,7 @@ export class SynchronizeCountryFirstPlaces {
     for (const user of users) {
       console.log(`Saving user: ${userIndex}/${users.length} users... (${user.id})`);
       user.countryFirstPlaces = usersFirstPlaces[user.id];
+      user.countryFirstPlacesCount = usersFirstPlacesCount[user.id];
       await this.firebaseGateway.setUser(user.id.toString(), user);
       userIndex++;
     }

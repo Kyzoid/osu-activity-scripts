@@ -1,4 +1,4 @@
-import { UserCountryFirstPlaceType } from "src/core/interfaces/UserInterface";
+import { UserCountryFirstPlaceType, UserKeysType } from "src/core/interfaces/UserInterface";
 
 export default interface User {
   id: number;
@@ -11,4 +11,5 @@ export default interface User {
   isActive: boolean;
   countryRank?: number;
   countryFirstPlaces?: UserCountryFirstPlaceType[];
+  countryFirstPlacesCount?: { [keys in UserKeysType]: number };
 }

@@ -1,4 +1,4 @@
-import ScoreInterface from './ScoreInterface';
+export type UserKeysType = '4K' | '7K' | 'XK';
 
 export default interface UserInterface {
   id: number;
@@ -11,6 +11,7 @@ export default interface UserInterface {
   isRanked: boolean;
   isActive: boolean;
   countryFirstPlaces?: UserCountryFirstPlaceType[];
+  countryFirstPlacesCount?: { [keys in UserKeysType]: number }
 }
 
 export type UserCountryFirstPlaceType = {
