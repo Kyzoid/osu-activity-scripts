@@ -14,5 +14,6 @@ export default class User implements UserInterface {
     public countryRank?: number,
     public countryFirstPlaces?: UserCountryFirstPlaceType[],
     public countryFirstPlacesCount?: { [keys in UserKeysType]: number },
+    public countryFirstPlacesTotal?: number,
   ) { }
 }

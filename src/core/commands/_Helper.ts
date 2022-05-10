@@ -36,6 +36,7 @@ export class _Helper {
 
       if (user.countryFirstPlaces) {
         user.countryFirstPlacesCount = usersFirstPlacesCount[user.id];
+        user.countryFirstPlacesTotal = usersFirstPlacesCount[user.id]['4K'] + usersFirstPlacesCount[user.id]['7K'] + usersFirstPlacesCount[user.id]['XK'];
       }
 
       promises.push(this.firebaseGateway.setUser(user.id.toString(), user));

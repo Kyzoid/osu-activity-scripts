@@ -11,7 +11,8 @@ export default interface UserInterface {
   isRanked: boolean;
   isActive: boolean;
   countryFirstPlaces?: UserCountryFirstPlaceType[];
-  countryFirstPlacesCount?: { [keys in UserKeysType]: number }
+  countryFirstPlacesCount?: { [keys in UserKeysType]: number };
+  countryFirstPlacesTotal?: number;
 }
 
 export type UserCountryFirstPlaceType = {

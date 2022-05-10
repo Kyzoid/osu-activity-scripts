@@ -12,4 +12,5 @@ export default interface User {
   countryRank?: number;
   countryFirstPlaces?: UserCountryFirstPlaceType[];
   countryFirstPlacesCount?: { [keys in UserKeysType]: number };
+  countryFirstPlacesTotal?: number;
 }
