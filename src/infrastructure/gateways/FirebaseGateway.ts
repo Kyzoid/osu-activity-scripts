@@ -92,16 +92,12 @@ export class FirebaseGateway implements FirebaseGatewayInterface {
       data.countryRank = user.countryRank;
     }
 
-    if (user.countryFirstPlaces) {
-      data.countryFirstPlaces = user.countryFirstPlaces;
-    }
-
-    if (user.countryFirstPlacesCount) {
-      data.countryFirstPlacesCount = user.countryFirstPlacesCount;
-    }
-
     if (user.countryFirstPlacesTotal) {
+      data.countryFirstPlaces = user.countryFirstPlaces;
+      data.countryFirstPlacesCountByKeys = user.countryFirstPlacesCountByKeys;
       data.countryFirstPlacesTotal = user.countryFirstPlacesTotal;
+      data.countryFirstPlacesCountByScores = user.countryFirstPlacesCountByScores;
+      data.countryFirstPlacesScoreAverage = user.countryFirstPlacesScoreAverage;
     }
     
     await db.collection('users').doc(id).set(data, { merge: true });

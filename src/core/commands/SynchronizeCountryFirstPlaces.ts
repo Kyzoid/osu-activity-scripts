@@ -1,5 +1,5 @@
 import { FirebaseGatewayInterface, OsuGatewayInterface } from '../interfaces';
-import { UserCountryFirstPlaceType, UserKeysType } from '../interfaces/UserInterface';
+import UserInterface, { UserCountryFirstPlaceType, UserKeysType, UserScoresType } from '../interfaces/UserInterface';
 
 export class SynchronizeCountryFirstPlaces {
   constructor(
@@ -9,60 +9,95 @@ export class SynchronizeCountryFirstPlaces {
 
   async execute() {
     const beatmaps = await this.firebaseGateway.getBeatmaps();
-    const users = await this.firebaseGateway.getUsers();
+    const users: UserInterface[] = [];
 
-    const usersFirstPlaces = users.reduce((acc: { [userId: string]: UserCountryFirstPlaceType[] }, user) => {
-      acc[user.id] = [];
-      return acc;
-    }, {});
-
-    const usersFirstPlacesCount = users.reduce((acc: { [userId: string]: { [keys in UserKeysType]: number } }, user) => {
-      acc[user.id] = { '4K': 0, '7K': 0, 'XK': 0 };
-      return acc;
-    }, {});
+    const usersFirstPlaces: { [userId: string]: UserCountryFirstPlaceType[] } = {};
 
     let beatmapIndex = 1;
     for (const beatmap of beatmaps) {
-      console.log(`SynchronizeCFP: ${beatmapIndex}/${beatmaps.length} beatmaps... (${beatmap.id})`);
+      const date = new Date();
+      const dateString = date.toLocaleDateString('fr-FR');
+      const timeString = date.toLocaleTimeString('fr-FR');
+      console.log(`[${dateString} ${timeString}]` ,`Reading beatmaps: ${beatmapIndex}/${beatmaps.length}... (${beatmap.id})`);
       beatmapIndex++;
 
       const beatmapScores = await this.osuGateway.getBeatmapScores(beatmap.id, 'mania', 'country');
       if (beatmapScores.length) {
-        const firstPlaceScore = beatmapScores[0];
+        const beatmapScore = beatmapScores[0];
+
+        const cfp: UserCountryFirstPlaceType = {
+          beatmapId: beatmap.id,
+          keys: beatmap.keys,
+          date: beatmapScore.createdAt,
+          accuracy: beatmapScore.accuracy,
+          mods: beatmapScore.mods,
+          pp: beatmapScore.pp,
+          rank: beatmapScore.rank,
+          score: beatmapScore.score
+        };
       
-        if (usersFirstPlaces[firstPlaceScore.userId]) {
-          usersFirstPlaces[firstPlaceScore.userId].push({ beatmapId: beatmap.id, keys: beatmap.keys });
+        if (usersFirstPlaces[beatmapScore.userId]) {
+          usersFirstPlaces[beatmapScore.userId].push(cfp);
         } else {
-          console.log(`Creating user (${firstPlaceScore.userId})`);
-          const newUser = await this.osuGateway.getUser(firstPlaceScore.userId);
-          users.push(newUser);
-          usersFirstPlaces[firstPlaceScore.userId] = [{ beatmapId: beatmap.id, keys: beatmap.keys }];
-          usersFirstPlacesCount[firstPlaceScore.userId] = { '4K': 0, '7K': 0, 'XK': 0 };
+          const user = await this.osuGateway.getUser(beatmapScore.userId);
+          users.push(user);
+          usersFirstPlaces[beatmapScore.userId] = [cfp];
         }
-
-        switch(beatmap.keys) {
-          case '4K':
-            usersFirstPlacesCount[firstPlaceScore.userId]['4K'] += 1;
-            break;
-          case '7K':
-            usersFirstPlacesCount[firstPlaceScore.userId]['7K'] += 1;
-            break;
-          default:
-            usersFirstPlacesCount[firstPlaceScore.userId]['XK'] += 1;
-        }
-
       }
     }
 
     let userIndex = 1;
     for (const user of users) {
-      console.log(`Saving user: ${userIndex}/${users.length} users... (${user.id})`);
+      console.log(`Saving users: ${userIndex}/${users.length}... (${user.username} #${user.id})`);
+
+      const { cfpByKeys, cfpCountByScores, totalScore } = this.computeFirstPlaces(usersFirstPlaces[user.id]);
+
       user.countryFirstPlaces = usersFirstPlaces[user.id];
-      user.countryFirstPlacesCount = usersFirstPlacesCount[user.id];
+      user.countryFirstPlacesCountByKeys = { '4K': cfpByKeys['4K'].length, '7K': cfpByKeys['7K'].length, 'XK': cfpByKeys['XK'].length };
+      user.countryFirstPlacesTotal = cfpByKeys['4K'].length + cfpByKeys['7K'].length + cfpByKeys['XK'].length;
+      user.countryFirstPlacesCountByScores = cfpCountByScores;
+      user.countryFirstPlacesScoreAverage = totalScore / user.countryFirstPlacesTotal;
+      
       await this.firebaseGateway.setUser(user.id.toString(), user);
       userIndex++;
     }
 
     return;
+  }
+
+  private computeFirstPlaces(userCountryFirstPlaces: UserCountryFirstPlaceType[]) {
+    const cfpByKeys: { '4K': UserCountryFirstPlaceType[], '7K': UserCountryFirstPlaceType[], 'XK': UserCountryFirstPlaceType[] } = { '4K': [], '7K': [], 'XK': [] };
+    const cfpCountByScores = { '1000': 0, '999': 0, '998': 0, '997': 0, '996': 0, 'Lower': 0 };
+    let totalScore = 0;
+
+    userCountryFirstPlaces.forEach((cfp) => {
+      totalScore += cfp.score;
+
+      if (cfp.keys === '4K') {
+        cfpByKeys['4K'].push(cfp);
+      } else if (cfp.keys === '7K') {
+        cfpByKeys['7K'].push(cfp);
+      } else {
+        cfpByKeys['XK'].push(cfp);
+      }
+
+      if (cfp.score === 1000000) {
+        cfpCountByScores['1000'] += 1;
+      } else if (cfp.score >= 999000 && cfp.score < 1000000) {
+        cfpCountByScores['999'] += 1;
+      } else if (cfp.score >= 998000 && cfp.score < 999000) {
+        cfpCountByScores['998'] += 1;
+      } else if (cfp.score >= 997000 && cfp.score < 998000) {
+        cfpCountByScores['997'] += 1;
+      } else if (cfp.score >= 996000 && cfp.score < 997000) {
+        cfpCountByScores['996'] += 1;
+      } else {
+        cfpCountByScores['Lower'] += 1;
+      }
+    });
+
+    return {
+      cfpByKeys, cfpCountByScores, totalScore
+    }
   }
 }

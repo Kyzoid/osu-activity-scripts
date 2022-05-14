@@ -38,8 +38,8 @@ const main = async () => {
     const getTopFifty = new GetTopFifty(osuGateway, firebaseGateway);
     const getRecentTopPlays = new GetRecentTopPlays(osuGateway, firebaseGateway);
 
-    console.log('_helper');
-    await _helper.execute();
+    // console.log('_helper');
+    // await _helper.execute();
     
     // console.log('synchronizeBeatmaps');
     // await synchronizeBeatmaps.execute();
@@ -50,8 +50,8 @@ const main = async () => {
     // console.log('getRecentTopPlays');
     // await getRecentTopPlays.execute();
 
-    // console.log('synchronizeCountryFirstPlaces');
-    // await synchronizeCountryFirstPlaces.execute();
+    console.log('synchronizeCountryFirstPlaces');
+    await synchronizeCountryFirstPlaces.execute();
    
     console.log('end');
 
