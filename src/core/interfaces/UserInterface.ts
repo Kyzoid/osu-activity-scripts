@@ -6,16 +6,25 @@ export default interface UserInterface {
   username: string;
   accuracy: number;
   globalRank: number;
-  countryRank?: number;
   playCount: number;
   pp: number;
   isRanked: boolean;
   isActive: boolean;
-  countryFirstPlaces?: UserCountryFirstPlaceType[];
-  countryFirstPlacesCountByKeys?: { [key in UserKeysType]: number };
-  countryFirstPlacesTotal?: number;
-  countryFirstPlacesCountByScores?: { [score in UserScoresType]: number };
-  countryFirstPlacesScoreAverage?: number;
+  coverUrl?: string;
+  avatarUrl?: string;
+  countryRank?: number;
+
+  // COUNTRY FIRST PLACE
+  cfpRank?: number;
+  cfp?: UserCountryFirstPlaceType[];
+
+  cfpCountByKeys?: { [key in UserKeysType]: number };
+  cfpCountByScores?: { [score in UserScoresType]: number };
+  cfpCountByKeysAndScores?: { [key in UserKeysType]: { [score in UserScoresType]: number } };
+  cfpCount?: number;
+
+  cfpScoreAverageByKeys?: { [key in UserKeysType]: number };
+  cfpScoreAverage?: number;
 }
 
 export type UserCountryFirstPlaceType = {
@@ -27,4 +36,13 @@ export type UserCountryFirstPlaceType = {
   pp: number;
   rank: string;
   score: number;
+}
+
+export type ComputedCfp = {
+  cfpCountByKeys: { [key in UserKeysType]: number };
+  cfpCountByScores: { [score in UserScoresType]: number };
+  cfpCountByKeysAndScores: { [key in UserKeysType]: { [score in UserScoresType]: number } };
+  cfpCount: number;
+  cfpScoreAverageByKeys: { [key in UserKeysType]: number };
+  cfpScoreAverage: number;
 }

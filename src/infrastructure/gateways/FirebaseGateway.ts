@@ -35,7 +35,7 @@ export class FirebaseGateway implements FirebaseGatewayInterface {
 
     snapshot.forEach((userDoc) => {
       const userData = userDoc.data() as FireUser;
-      users.push(new User(userData.id, userData.username, userData.accuracy, userData.globalRank, userData.playCount, userData.pp, userData.isRanked, userData.isActive, userData.countryRank, userData.countryFirstPlaces));
+      users.push(User.createUserFromFireUser(userData));
     });
 
     return users;
@@ -47,7 +47,7 @@ export class FirebaseGateway implements FirebaseGatewayInterface {
 
     snapshot.forEach((userDoc) => {
       const userData = userDoc.data() as FireUser;
-      users.push(new User(userData.id, userData.username, userData.accuracy, userData.globalRank, userData.playCount, userData.pp, userData.isRanked, userData.isActive, userData.countryRank, userData.countryFirstPlaces));
+      users.push(User.createUserFromFireUser(userData));
     });
 
     return users;
@@ -62,18 +62,7 @@ export class FirebaseGateway implements FirebaseGatewayInterface {
 
     const userData = userDoc.data() as FireUser;
 
-    return new User(
-      userData.id,
-      userData.username,
-      userData.accuracy,
-      userData.globalRank,
-      userData.playCount,
-      userData.pp,
-      userData.isRanked,
-      userData.isActive,
-      userData.countryRank,
-      userData.countryFirstPlaces,
-    );
+    return User.createUserFromFireUser(userData);
   }
 
   async setUser(id: string, user: UserInterface): Promise<void> {
@@ -92,12 +81,23 @@ export class FirebaseGateway implements FirebaseGatewayInterface {
       data.countryRank = user.countryRank;
     }
 
-    if (user.countryFirstPlacesTotal) {
-      data.countryFirstPlaces = user.countryFirstPlaces;
-      data.countryFirstPlacesCountByKeys = user.countryFirstPlacesCountByKeys;
-      data.countryFirstPlacesTotal = user.countryFirstPlacesTotal;
-      data.countryFirstPlacesCountByScores = user.countryFirstPlacesCountByScores;
-      data.countryFirstPlacesScoreAverage = user.countryFirstPlacesScoreAverage;
+    if (user.coverUrl) {
+      data.coverUrl = user.coverUrl;
+    }
+
+    if (user.avatarUrl) {
+      data.avatarUrl = user.avatarUrl;
+    }
+
+    if (user.cfpCount) {
+      data.cfpRank = user.cfpRank;
+      data.cfp = user.cfp;
+      data.cfpCountByKeys = user.cfpCountByKeys;
+      data.cfpCountByScores = user.cfpCountByScores;
+      data.cfpCountByKeysAndScores = user.cfpCountByKeysAndScores;
+      data.cfpCount = user.cfpCount;
+      data.cfpScoreAverageByKeys = user.cfpScoreAverageByKeys;
+      data.cfpScoreAverage = user.cfpScoreAverage;
     }
     
     await db.collection('users').doc(id).set(data, { merge: true });

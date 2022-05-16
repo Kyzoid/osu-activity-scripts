@@ -9,11 +9,19 @@ export default interface User {
   pp: number;
   isRanked: boolean;
   isActive: boolean;
+  coverUrl?: string;
+  avatarUrl?: string;
   countryRank?: number;
 
-  countryFirstPlaces?: UserCountryFirstPlaceType[];
-  countryFirstPlacesCountByKeys?: { [key in UserKeysType]: number };
-  countryFirstPlacesTotal?: number;
-  countryFirstPlacesCountByScores?: { [score in UserScoresType]: number };
-  countryFirstPlacesScoreAverage?: number;
+  // COUNTRY FIRST PLACE
+  cfpRank?: number;
+  cfp?: UserCountryFirstPlaceType[];
+
+  cfpCountByKeys?: { [key in UserKeysType]: number };
+  cfpCountByKeysAndScores?: { [key in UserKeysType]: { [score in UserScoresType]: number } };
+  cfpCountByScores?: { [score in UserScoresType]: number };
+  cfpCount?: number;
+
+  cfpScoreAverageByKeys?: { [key in UserKeysType]: number };
+  cfpScoreAverage?: number;
 }

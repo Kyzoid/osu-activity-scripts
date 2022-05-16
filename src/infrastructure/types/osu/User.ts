@@ -1,6 +1,10 @@
 export default interface User {
   id: number;
   username: string;
+  cover?: {
+    url?: string; 
+  };
+  avatar_url: string;
   statistics: {
     global_rank: number;
     country_rank: number;
